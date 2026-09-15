@@ -1,0 +1,32 @@
+# Variables de entorno / secretos
+.env
+.env.*
+!.env.example
+
+# Dependencias
+node_modules/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code local
+.vscode/
+
+# Logs
+*.log
+
+# Builds y temporales
+dist/
+tmp/
+temp/
+
+# Copias y comprimidos
+*.zip
+*.rar
+*.7z
+
+# Documentos privados
+*.docx
+*.pdf
