@@ -1,0 +1,141 @@
+/* Optional enhancement: photos and content keep their original layout without motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero[data-depth], .detail-hero[data-depth] {
+    isolation: isolate;
+    overflow: hidden;
+    background-image: none;
+  }
+
+  [data-depth]::before {
+    content: "";
+    position: absolute;
+    inset: -16px 0 0;
+    z-index: -1;
+    background-image: var(--hero-image);
+    background-size: cover;
+    background-position: inherit;
+    transform: translateY(var(--depth-shift, 0));
+  }
+
+  .is-revealed {
+    animation: experience-reveal .65s cubic-bezier(.2,.7,.25,1) both;
+  }
+
+  @keyframes experience-reveal {
+    from { opacity: .74; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .property-photo, [data-gallery] button img { transition: transform .55s cubic-bezier(.2,.7,.25,1); }
+  .property:hover .property-photo, [data-gallery] button:hover img { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-gallery] button img { transition: none; }
+  [data-gallery] button:hover img { transform: none; }
+}
+
+dialog.photo-dialog {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: min(960px, calc(100% - 24px));
+  max-width: none;
+  max-height: calc(100dvh - 24px);
+  height: fit-content;
+  margin: auto;
+  padding: clamp(12px, 2.4vw, 24px);
+  border: 1px solid #ffffff30;
+  border-radius: 18px;
+  background: #15201d;
+  color: #fff;
+  overflow: auto;
+}
+
+dialog.photo-dialog[open] { display: block; }
+dialog.photo-dialog::backdrop { background: #0a100deb; }
+[data-photo-dialog] .photo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+[data-photo-dialog] .lightbox-counter {
+  position: static;
+  padding: 0;
+  background: transparent;
+  font-size: .9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-photo-dialog] button {
+  color: inherit;
+  background: #ffffff22;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1.75rem;
+  line-height: 1;
+  touch-action: manipulation;
+}
+[data-photo-dialog] .lightbox-close { position: static; flex: 0 0 48px; width: 48px; height: 48px; }
+[data-photo-dialog] .photo-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 4px;
+  touch-action: pan-y pinch-zoom;
+}
+
+[data-photo-dialog] .photo-stage button { position: static; width: 44px; height: 44px; }
+[data-photo-dialog] .photo-stage img {
+  width: 100%;
+  height: min(55dvh, 540px);
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  user-select: none;
+}
+
+[data-photo-dialog] [data-photo-caption] { margin: 8px 0; text-align: center; min-height: 1.5em; }
+[data-photo-dialog] .photo-rail {
+  display: flex;
+  position: relative;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+[data-photo-dialog] .photo-rail button {
+  position: static;
+  flex: 0 0 62px;
+  width: 62px;
+  height: 48px;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+}
+[data-photo-dialog] .photo-rail img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; display: block; }
+[data-photo-dialog] .photo-rail button[aria-current="true"] { border-color: white; }
+[data-photo-dialog] button:focus-visible { outline: 2px solid #d0f5df; outline-offset: 2px; }
+[data-gallery] button:focus-visible { outline: 3px solid #fff; outline-offset: -5px; }
+
+@media (max-width: 540px) {
+  [data-photo-dialog] .photo-stage { grid-template-columns: minmax(0,1fr); }
+  [data-photo-dialog] .photo-stage img { height: min(52dvh, 460px); }
+  [data-photo-dialog] .photo-stage button {
+    position: absolute;
+    z-index: 1;
+    top: calc(50% - 22px);
+    background: #15201deb;
+  }
+  [data-photo-dialog] .lightbox-prev { left: 4px; }
+  [data-photo-dialog] .lightbox-next { right: 4px; }
+}
